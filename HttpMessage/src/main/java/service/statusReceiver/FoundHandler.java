@@ -23,7 +23,7 @@ public class FoundHandler implements BaseHandler {
         try {
             Map<String, Object> ans = new HashMap<>();
             ans.put("status", HttpStatus.CODE_302);
-            if (null == response.getHeader().getProperty(ResponseHeader.CACHE_CONTROLL) ||
+            if (null != response.getHeader().getProperty(ResponseHeader.CACHE_CONTROLL) &&
                     !response.getHeader()
                             .getProperty(ResponseHeader.CACHE_CONTROLL).equals("no-cache")) { //已指定不需要设置缓存
                 ans.put("cache-location", FileUtils.cacheResponse(response, "/cache/"));

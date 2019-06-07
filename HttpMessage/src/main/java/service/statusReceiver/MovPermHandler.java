@@ -41,7 +41,7 @@ public class MovPermHandler implements BaseHandler {
         try {
             Map<String, Object> ans = new HashMap<>();
             ans.put("status", HttpStatus.CODE_301);
-            if (null == response.getHeader().getProperty(ResponseHeader.CACHE_CONTROLL) ||
+            if (null != response.getHeader().getProperty(ResponseHeader.CACHE_CONTROLL) &&
                     !"no-cache".equals(response.getHeader()
                             .getProperty(ResponseHeader.CACHE_CONTROLL))) { //已指定不需要设置缓存
                 ans.put("cache-location", FileUtils.cacheResponse(response, "/cache/"));
