@@ -219,8 +219,7 @@ public class RequestViewController {
         request.setVersion(HttpVersion.HTTP_VERSION_1_1);
         request.setMethod(methodBox.getValue());
         request.setUrl(
-                getUrl() + (methodBox.getValue().equals(HttpMethod.GET) ?
-                        ("?" + RequestHelper.buildParamString(paramTable.getItems())) : ""));
+                getUrl() + getParamString());
 
         //TODO set request body
         if (methodBox.getValue().equals(HttpMethod.POST)) {
@@ -276,6 +275,11 @@ public class RequestViewController {
     private int getPort() {
         String address = addressTf.getText();
         return Integer.parseInt(address.substring(address.indexOf(":") + 1, address.indexOf("/")));
+    }
+
+    private String getParamString() {
+        String part = RequestHelper.buildParamString(paramTable.getItems());
+        return part.length() == 0 ? "" : ("?" + part);
     }
 
 

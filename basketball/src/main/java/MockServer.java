@@ -1,6 +1,7 @@
 import http.core.HttpRequest;
 import http.core.HttpResponse;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.ServerSocket;
@@ -30,14 +31,31 @@ public class MockServer {
 
                 try {
                     InputStream in = socket.getInputStream();
+                    if (in.available() == 0)
+                        continue;
                     HttpRequest request = new HttpRequest(in);
                     System.out.println("receive request from client: "
                             + socket.getPort()
                             + "\n" + "content: "
                             + request.toString());
 
-                    HttpResponse response = new HttpResponse();
-                    response.writeTo(socket.getOutputStream());
+                    String response = "HTTP/1.1 200 OK\n" +
+                            "Date: Sat, 31 Dec 2005 23:59:59 GMT\n" +
+                            "Content-Type: text/html;charset=ISO-8859-1\n" +
+                            "Content-Length: 122\n" +
+                            "\n" +
+                            "＜html＞\n" +
+                            "＜head＞\n" +
+                            "＜title＞Wrox Homepage＜/title＞\n" +
+                            "＜/head＞\n" +
+                            "＜body＞\n" +
+                            "＜!-- body goes here --＞\n" +
+                            "＜/body＞\n" +
+                            "＜/html＞\n";
+                    InputStream is = new ByteArrayInputStream(response.getBytes());
+                    HttpResponse httpResponse = new HttpResponse(is);
+                    httpResponse.writeTo(socket.getOutputStream());
+                    socket.shutdownOutput();
                     System.out.println("send response");
                 } catch (Exception e) {
                     e.printStackTrace();

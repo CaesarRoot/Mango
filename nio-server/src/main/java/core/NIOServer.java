@@ -7,7 +7,6 @@ import http.util.handler.HttpRequestUtils;
 import http.util.handler.HttpUtils;
 import service.Configuration;
 import service.HttpContext;
-import service.HttpMethodFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -89,7 +88,7 @@ public class NIOServer {
                                     clientChannel.read(byteBuffer);
                                     byteBuffer.flip();
 
-                                    System.out.println(new String(byteBuffer.array(),Charset.defaultCharset()));
+                                    System.out.println(new String(byteBuffer.array(), Charset.defaultCharset()));
                                     // 拿到客户端发来的请求
                                     HttpRequest httpRequest = new HttpRequest(new ByteArrayInputStream(byteBuffer.array()));
 
@@ -98,6 +97,7 @@ public class NIOServer {
                                         HttpContext httpContext = new HttpContext();
                                         HttpResponse response = httpContext.processRequest(httpRequest);
                                         response.writeTo(clientChannel);
+
                                     } catch (Exception e) {
                                         //handle处理请求过程中抛出的异常
                                         e.printStackTrace();

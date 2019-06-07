@@ -9,6 +9,7 @@ import util.SocketHolder;
 import view.MessageView;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class HttpService {
 
             request.writeTo(s.getOutputStream());
 //             在此处阻塞
-            response = new HttpResponse(s.getInputStream());
+            response = getResponseFromSocket(s);
             displayResponse(response);
 
             //重定向
@@ -70,7 +71,7 @@ public class HttpService {
                 }
                 request.setUrl(targetUri + getParamString(url));
                 request.writeTo(s.getOutputStream());
-                response = new HttpResponse(s.getInputStream());
+                response = getResponseFromSocket(s);
                 displayResponse(response);
             }
 
@@ -102,6 +103,18 @@ public class HttpService {
 
     private void displayResponse(HttpResponse response) {
         MessageView.display("response", resMap2String(StatusHandler.handle(response)));
+    }
+
+    private HttpResponse getResponseFromSocket(Socket s) throws IOException {
+        InputStream in = s.getInputStream();
+        while (true) {
+            //如果一直为0客户端会卡死
+            if (in.available() == 0)
+                continue;
+            HttpResponse response = new HttpResponse(in);
+            return response;
+        }
+
     }
 
 

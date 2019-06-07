@@ -32,7 +32,7 @@ public class RequestHelper {
      * @return 如果符合http规范的query_parameter形式，返回true，否则返回false
      */
     public static boolean validateParam(ParamTuple o) {
-        return o.getKey().length() > 0 && o.getValue().length() > 0;
+        return o.getKey().length() > 0 && o.getValue().length() > 0 && !o.getKey().equals("key");
     }
 
     /**

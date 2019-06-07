@@ -79,6 +79,7 @@ public class SocketHolder {
 
         if (socket == null) {
             socket = new Socket(ipAddress, port);
+            System.out.println("port = " + socket.getLocalPort());
             socketPool.add(socket);
         }
 
